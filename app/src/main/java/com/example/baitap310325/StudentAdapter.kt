@@ -7,7 +7,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-class StudentAdapter(val students: List<StudentModel>) : BaseAdapter() {
+class StudentAdapter(val students: MutableList<StudentModel>) : BaseAdapter() {
     override fun getCount() = students.size
     override fun getItem(p0: Int) = students[p0]
     override fun getItemId(position: Int) = position.toLong()
@@ -29,6 +29,7 @@ class StudentAdapter(val students: List<StudentModel>) : BaseAdapter() {
             viewHolder.textHoten = itemView.findViewById<TextView>(R.id.text_hoten)
             viewHolder.textMssv = itemView.findViewById<TextView>(R.id.text_mssv)
             viewHolder.imageDelete = itemView.findViewById<ImageView>(R.id.image_delete)
+            itemView.tag = viewHolder
         } else {
             itemView = p1
             viewHolder = p1.tag as ViewHolder
@@ -38,10 +39,12 @@ class StudentAdapter(val students: List<StudentModel>) : BaseAdapter() {
         viewHolder.textHoten.text = student.hoten
         viewHolder.textMssv.text = student.mssv
         viewHolder.imageDelete.setImageResource(student.delResId) // if same why change?
+        viewHolder.imageDelete.setOnClickListener {
+            students.removeAt(p0)
+            notifyDataSetChanged()
+        }
 
         return itemView
-
-
     }
 
     class ViewHolder {
